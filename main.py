@@ -18,6 +18,6 @@ f1driverdb: List[str,str,str, List[str]] = [
            "Red Bull"
            "EA Sports"
            "Heiken" 
-        ]
-    )
+        ],
+    ),
 ]
