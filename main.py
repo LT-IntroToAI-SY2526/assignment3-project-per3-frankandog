@@ -1,4 +1,4 @@
-f1driverdb: List[str,str,str, List[str]] = [
+f1driverdb: List[str,str, List[str]] = [
     (
         "Max Verstappen",
         "Netherlands",

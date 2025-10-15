@@ -3,26 +3,22 @@ from match import match
 from typing import List, Tuple, Callable, Any
 
 # The projection functions, that give us access to certain parts of a "movie" (a tuple)
-def get_title(movie: Tuple[str, str, int, List[str]]) -> str:
-    return movie[0]
+def get_driver(main: Tuple[str, str, List[str]]) -> str:
+    return main[0]
 
 
-def get_director(movie: Tuple[str, str, int, List[str]]) -> str:
-    return movie[1]
+def get_country(main: Tuple[str, str, List[str]]) -> str:
+    return main[1]
 
 
-def get_year(movie: Tuple[str, str, int, List[str]]) -> int:
-    return movie[2]
-
-
-def get_actors(movie: Tuple[str, str, int, List[str]]) -> List[str]:
-    return movie[3]
+def get_sponsors(main: Tuple[str, str, List[str]]) -> List[str]:
+    return main[2]
 
 
 
 def title_by_year(matches: List[str]) -> List[str]:
 
-    year = int(matches[0])
+    driver = int(matches[0])
     result = []
     for movie in f1driverdb:
         if get_year(movie) == year:
