@@ -1,4 +1,4 @@
-from movies import movie_db
+from main import f1driverdb
 from match import match
 from typing import List, Tuple, Callable, Any
 
@@ -19,46 +19,22 @@ def get_actors(movie: Tuple[str, str, int, List[str]]) -> List[str]:
     return movie[3]
 
 
-# Below are a set of actions. Each takes a list argument and returns a list of answers
-# according to the action and the argument. It is important that each function returns a
-# list of the answer(s) and not just the answer itself.
-
 
 def title_by_year(matches: List[str]) -> List[str]:
-    """Finds all movies made in the passed in year
 
-    Args:
-        matches - a list of 1 string, just the year. Note that this year is passed as a
-            string and should be converted to an int
-
-    Returns:
-        a list of movie titles made in the passed in year
-    """
     year = int(matches[0])
     result = []
-    for movie in movie_db:
+    for movie in f1driverdb:
         if get_year(movie) == year:
             result.append(get_title(movie))
     return result
 
 def title_by_year_range(matches: List[str]) -> List[str]:
-    """Finds all movies made in the passed in year range
 
-    Args:
-        matches - a list of 2 strings, the year beginning the range and the year ending
-            the range. For example, to get movies from 1991-1994 matches would look like
-           this - ["1991", "1994"] Note that these years are passed as strings and
-            should be converted to ints.
-
-    Returns:
-        a list of movie titles made during those years, inclusive (meaning if you pass
-        in ["1991", "1994"] you will get movies made in 1991, 1992, 1993 & 1994)
-    """
-    
     start_year = int(matches[0])
     end_year = int(matches[1])
     result = []
-    for movie in movie_db:
+    for movie in f1driverdb:
         if start_year <= get_year(movie) <= end_year:
             result.append(get_title(movie))
     return result
@@ -66,126 +42,71 @@ def title_by_year_range(matches: List[str]) -> List[str]:
 
 
 def title_before_year(matches: List[str]) -> List[str]:
-    """Finds all movies made before the passed in year
-
-    Args:
-        matches - a list of 1 string, just the year. Note that this year is passed as a
-            string and should be converted to an int
-
-    Returns:
-        a list of movie titles made before the passed in year, exclusive (meaning if you
-        pass in 1992 you won't get any movies made that year, only before)
-    """
     
     year = int(matches[0])
     result = []
-    for movie in movie_db:
+    for movie in f1driverdb:
         if get_year(movie) < year:
             result.append(get_title(movie))
     return result
 
 
 def title_after_year(matches: List[str]) -> List[str]:
-    """Finds all movies made after the passed in year
 
-    Args:
-        matches - a list of 1 string, just the year. Note that this year is passed as a
-            string and should be converted to an int
-
-    Returns:
-        a list of movie titles made after the passed in year, exclusive (meaning if you
-        pass in 1992 you won't get any movies made that year, only after)
-    """
     year = int(matches[0])
     result = []
-    for movie in movie_db:
+    for movie in f1driverdb:
         if get_year(movie) > year:
             result.append(get_title(movie))
     return result
 
 
 def director_by_title(matches: List[str]) -> List[str]:
-    """Finds director of movie based on title
 
-    Args:
-        matches - a list of 1 string, just the title
-
-    Returns:
-        a list of 1 string, the director of the movie
-    """
     title = matches[0]
     result = []
-    for movie in movie_db:
+    for movie in f1driverdb:
         if get_title(movie) == title:
             result.append(get_director(movie))
     return result
 
 
 def title_by_director(matches: List[str]) -> List[str]:
-    """Finds movies directed by the passed in director
 
-    Args:
-        matches - a list of 1 string, just the director
-
-    Returns:
-        a list of movies titles directed by the passed in director
-    """
     result = []
     director = matches[0]
 
-    for movie in movie_db:
+    for movie in f1driverdb:
         if get_director(movie) == director:
             result.append(get_title(movie))
     return result
 
 
 def actors_by_title(matches: List[str]) -> List[str]:
-    """Finds actors who acted in the passed in movie title
 
-    Args:
-        matches - a list of 1 string, just the movie title
-
-    Returns:
-        a list of actors who acted in the passed in title
-    """
     result = []
     title = matches[0]
-    for movie in movie_db:
+    for movie in f1driverdb:
         if get_title(movie) == title:
             result = get_actors(movie)
     return result
 
 
 def year_by_title(matches: List[str]) -> List[int]:
-    """Finds year of passed in movie title
 
-    Args:
-        matches - a list of 1 string, just the movie title
-
-    Returns:
-        a list of one item (an int), the year that the movie was made
-    """
     result = []
     title = matches[0]
-    for movie in movie_db:
+    for movie in f1driverdb:
         if get_title(movie) == title:
             result.append(get_year (movie))
     return result
 
 
 def title_by_actor(matches: List[str]) -> List[str]:
-    """Finds titles of all movies that the given actor was in
-
-    Args:
-        matches - a list of 1 string, just the actor
-
-    Returns:
-        a list of movie titles that the actor acted in
-    """
     
     actor = matches[0]
     result = []
-    for movie in movie_db:
+    for movie in f1driverdb:
         if actor in get_actors(movie):
             result.append(get_title(movie))
     return result
@@ -193,27 +114,23 @@ def title_by_actor(matches: List[str]) -> List[str]:
 def actor_by_director(matches:List[str]) -> List[str]:
     director = matches[0]
     result = []
-    for movie in movie_db:
+    for movie in f1driverdb:
         if director in get_director(movie):
             result.append(get_actors(movie))
     return result
 
 
-
-# dummy argument is ignored and doesn't matter
 def bye_action(dummy: List[str]) -> None:
     raise KeyboardInterrupt
 
 
-# The pattern-action list for the natural language query system A list of tuples of
-# pattern and action It must be declared here, after all of the function definitions
+
 pa_list: List[Tuple[List[str], Callable[[List[str]], List[Any]]]] = [
     (str.split("what movies were made in _"), title_by_year),
     (str.split("what movies were made between _ and _"), title_by_year_range),
     (str.split("what movies were made before _"), title_before_year),
     (str.split("what movies were made after _"), title_after_year),
-    # note there are two valid patterns here two different ways to ask for the director
-    # of a movie
+
     (str.split("who directed %"), director_by_title),
     (str.split("who was the director of %"), director_by_title),
     (str.split("what movies were directed by %"), title_by_director),
@@ -226,17 +143,7 @@ pa_list: List[Tuple[List[str], Callable[[List[str]], List[Any]]]] = [
 
 
 def search_pa_list(src: List[str]) -> List[str]:
-    """Takes source, finds matching pattern and calls corresponding action. If it finds
-    a match but has no answers it returns ["No answers"]. If it finds no match it
-    returns ["I don't understand"].
 
-    Args:
-        source - a phrase represented as a list of words (strings)
-
-    Returns:
-        a list of answers. Will be ["I don't understand"] if it finds no matches and
-        ["No answers"] if it finds a match but no answers
-    """
     for pat, act, in pa_list:
         print(f"pattern: {pat}, source: {src}, action: {act}")
         mat = match(pat, src)
@@ -249,9 +156,7 @@ def search_pa_list(src: List[str]) -> List[str]:
     return("I don't understand")
 
 def query_loop() -> None:
-    """The simple query loop. The try/except structure is to catch Ctrl-C or Ctrl-D
-    characters and exit gracefully.
-    """
+
     print("Welcome to the movie database!\n")
     while True:
         try:
@@ -266,11 +171,6 @@ def query_loop() -> None:
 
     print("\nSo long!\n")
 
-
-# uncomment the following line once you've written all of your code and are ready to try
-# it out. Before running the following line, you should make sure that your code passes
-# the existing asserts.
-# query_loop()
 
 if __name__ == "__main__":
     assert isinstance(title_by_year(["1974"]), list), "title_by_year not returning a list"
