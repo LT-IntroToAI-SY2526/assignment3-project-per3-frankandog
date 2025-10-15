@@ -1,6 +1,6 @@
-from movies import movie_db
+from f1drivers import main
 from match import match
-from typing import List, Tuple, Callable, Any
+from typing import List, Any
 
 # The projection functions, that give us access to certain parts of a "movie" (a tuple)
 def get_title(movie: Tuple[str, str, int, List[str]]) -> str:
