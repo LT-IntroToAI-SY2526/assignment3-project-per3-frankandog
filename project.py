@@ -16,103 +16,61 @@ def get_sponsors(main: Tuple[str, str, List[str]]) -> List[str]:
 
 
 
-def title_by_year(matches: List[str]) -> List[str]:
+def driver_by_country(matches: List[str]) -> List[str]:
 
-    driver = int(matches[0])
+    country = matches[0]
     result = []
-    for movie in f1driverdb:
-        if get_year(movie) == year:
-            result.append(get_title(movie))
-    return result
-
-def title_by_year_range(matches: List[str]) -> List[str]:
-
-    start_year = int(matches[0])
-    end_year = int(matches[1])
-    result = []
-    for movie in f1driverdb:
-        if start_year <= get_year(movie) <= end_year:
-            result.append(get_title(movie))
+    for driver in f1driverdb:
+        if get_country(driver) == country:
+            result.append(get_driver(driver))
     return result
 
 
+def country_by_driver(matches: List[str]) -> List[str]:
 
-def title_before_year(matches: List[str]) -> List[str]:
-    
-    year = int(matches[0])
+    driver = matches[1]
     result = []
-    for movie in f1driverdb:
-        if get_year(movie) < year:
-            result.append(get_title(movie))
+    for country in f1driverdb:
+        if get_driver(country) == driver:
+            result.append(get_country(country))
     return result
 
 
-def title_after_year(matches: List[str]) -> List[str]:
+def sponsors_by_driver(matches: List[str]) -> List[str]:
 
-    year = int(matches[0])
+    driver = matches[0]
     result = []
-    for movie in f1driverdb:
-        if get_year(movie) > year:
-            result.append(get_title(movie))
+    for sponsors in f1driverdb:
+        if get_driver(sponsors) == driver:
+            result = get_sponsors(sponsors)
     return result
 
 
-def director_by_title(matches: List[str]) -> List[str]:
+def sponsor_by_country(matches: List[str]) -> List[str]:
 
-    title = matches[0]
+    country = matches[0]
     result = []
-    for movie in f1driverdb:
-        if get_title(movie) == title:
-            result.append(get_director(movie))
+    for sponsor in f1driverdb:
+        if get_country(sponsor) == country:
+            result.append(get_sponsors(sponsor))
     return result
 
+def driver_by_sponsor(matches: List[str]) -> List[str]:
 
-def title_by_director(matches: List[str]) -> List[str]:
-
+    sponsor = matches[0]
     result = []
-    director = matches[0]
-
-    for movie in f1driverdb:
-        if get_director(movie) == director:
-            result.append(get_title(movie))
+    for driver in f1driverdb:
+        if get_sponsors(driver) == sponsor:
+            result.append(get_driver(driver))
     return result
 
+def country_by_sponsor(matches: List[str]) -> List[str]:
 
-def actors_by_title(matches: List[str]) -> List[str]:
-
+    sponsor = matches[0]
     result = []
-    title = matches[0]
-    for movie in f1driverdb:
-        if get_title(movie) == title:
-            result = get_actors(movie)
-    return result
-
-
-def year_by_title(matches: List[str]) -> List[int]:
-
-    result = []
-    title = matches[0]
-    for movie in f1driverdb:
-        if get_title(movie) == title:
-            result.append(get_year (movie))
-    return result
-
-
-def title_by_actor(matches: List[str]) -> List[str]:
-    
-    actor = matches[0]
-    result = []
-    for movie in f1driverdb:
-        if actor in get_actors(movie):
-            result.append(get_title(movie))
-    return result
-
-def actor_by_director(matches:List[str]) -> List[str]:
-    director = matches[0]
-    result = []
-    for movie in f1driverdb:
-        if director in get_director(movie):
-            result.append(get_actors(movie))
+    for country in f1driverdb:
+        if get_sponsors(country) == sponsor:
+            result.append(get_country(country))
     return result
 
 
@@ -122,18 +80,13 @@ def bye_action(dummy: List[str]) -> None:
 
 
 pa_list: List[Tuple[List[str], Callable[[List[str]], List[Any]]]] = [
-    (str.split("what movies were made in _"), title_by_year),
-    (str.split("what movies were made between _ and _"), title_by_year_range),
-    (str.split("what movies were made before _"), title_before_year),
-    (str.split("what movies were made after _"), title_after_year),
+    (str.split("what drivers race for _"), driver_by_country),
+    (str.split("what country has _ driven for"), country_by_driver),
+    (str.split("What sponsors has _ had"), sponsors_by_driver),
+    (str.split("What sponsors has the nation _ had"), sponsor_by_country),
+    (str.split("who drove with these _"), driver_by_sponsor),
+    (str.split("What sponsors supported _"), country_by_sponsor),
 
-    (str.split("who directed %"), director_by_title),
-    (str.split("who was the director of %"), director_by_title),
-    (str.split("what movies were directed by %"), title_by_director),
-    (str.split("who acted in %"), actors_by_title),
-    (str.split("when was % made"), year_by_title),
-    (str.split("in what movies did % appear"), title_by_actor),
-    (str.split("in what year was % made"), year_by_title),
     (["bye"], bye_action),
 ]
 
@@ -153,7 +106,7 @@ def search_pa_list(src: List[str]) -> List[str]:
 
 def query_loop() -> None:
 
-    print("Welcome to the movie database!\n")
+    print("Welcome to the F1 Driver database!\n")
     while True:
         try:
             print()
@@ -166,62 +119,3 @@ def query_loop() -> None:
             break
 
     print("\nSo long!\n")
-
-
-if __name__ == "__main__":
-    assert isinstance(title_by_year(["1974"]), list), "title_by_year not returning a list"
-    assert sorted(title_by_year(["1974"])) == sorted(
-        ["amarcord", "chinatown"]
-    ), "failed title_by_year test"
-    assert isinstance(title_by_year_range(["1970", "1972"]), list), "title_by_year_range not returning a list"
-    assert sorted(title_by_year_range(["1970", "1972"])) == sorted(
-        ["the godfather", "johnny got his gun"]
-    ), "failed title_by_year_range test"
-    assert isinstance(title_before_year(["1950"]), list), "title_before_year not returning a list"
-    assert sorted(title_before_year(["1950"])) == sorted(
-        ["casablanca", "citizen kane", "gone with the wind", "metropolis"]
-    ), "failed title_before_year test"
-    assert isinstance(title_after_year(["1990"]), list), "title_after_year not returning a list"
-    assert sorted(title_after_year(["1990"])) == sorted(
-        ["boyz n the hood", "dead again", "the crying game", "flirting", "malcolm x"]
-    ), "failed title_after_year test"
-    assert isinstance(director_by_title(["jaws"]), list), "director_by_title not returning a list"
-    assert sorted(director_by_title(["jaws"])) == sorted(
-        ["steven spielberg"]
-    ), "failed director_by_title test"
-    assert isinstance(title_by_director(["steven spielberg"]), list), "title_by_director not returning a list"
-    assert sorted(title_by_director(["steven spielberg"])) == sorted(
-        ["jaws"]
-    ), "failed title_by_director test"
-    assert isinstance(actors_by_title(["jaws"]), list), "actors_by_title not returning a list"
-    assert sorted(actors_by_title(["jaws"])) == sorted(
-        [
-            "roy scheider",
-            "robert shaw",
-            "richard dreyfuss",
-            "lorraine gary",
-            "murray hamilton",
-        ]
-    ), "failed actors_by_title test"
-    assert sorted(actors_by_title(["movie not in database"])) == [], "failed actors_by_title not in database test"
-    assert isinstance(year_by_title(["jaws"]), list), "year_by_title not returning a list"
-    assert sorted(year_by_title(["jaws"])) == sorted(
-        [1975]
-    ), "failed year_by_title test"
-    assert isinstance(title_by_actor(["orson welles"]), list), "title_by_actor not returning a list"
-    assert sorted(title_by_actor(["orson welles"])) == sorted(
-        ["citizen kane", "othello"]
-    ), "failed title_by_actor test"
-    
-    
-    assert sorted(search_pa_list(["hi", "there"])) == sorted(
-        ["I don't understand"]
-    ), "failed search_pa_list test 1"
-    assert sorted(search_pa_list(["who", "directed", "jaws"])) == sorted(
-        ["steven spielberg"]
-    ), "failed search_pa_list test 2"
-    assert sorted(
-        search_pa_list(["what", "movies", "were", "made", "in", "2020"])
-    ) == sorted(["No answers"]), "failed search_pa_list test 3"
-
-    print("All tests passed!")
