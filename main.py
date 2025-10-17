@@ -1,4 +1,6 @@
-f1driverdb: List[str,str, List[str]] = [
+from typing import List, Tuple
+
+f1driverdb: List[Tuple[str,str, List[str]]] = [
     (
         "Max Verstappen",
         "Netherlands",
